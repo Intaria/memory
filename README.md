@@ -15,13 +15,14 @@ templates/games.md
 templates/anime.md
 templates/manga.md
 schemas/<category>.schema.json  # JSON Schema: какие поля допустимы в категории
+users.yaml                     # список пользователей, которые могут добавлять записи
 scripts/validate.py             # проверка всех записей
 ```
 
 ## Как добавить запись
 
 1. Скопируй шаблон из `templates/<category>.md` в `entities/<category>/`.
-2. Заполни `title` и по желанию `tags` и другие поля.
+2. Заполни `title`, по желанию `added_by` (кто добавил), `tags` и другие поля.
 3. Коммит будет отклонён, если запись не пройдёт проверку.
 
 Пример записи (`entities/movies/brat.md`):
@@ -29,6 +30,7 @@ scripts/validate.py             # проверка всех записей
 ```markdown
 ---
 title: "Брат"
+added_by: "Максим"
 tags: [драма, криминал, россия]
 ---
 ```
@@ -37,16 +39,22 @@ tags: [драма, криминал, россия]
 
 | Категория | Обязательные поля | Опциональные поля |
 |-----------|-------------------|-------------------|
-| movies    | `title`           | `tags`            |
-| books     | `title`           | `author`, `tags`  |
+| movies    | `title`           | `tags`, `parts`   |
+| books     | `title`           | `author`, `tags`, `parts` |
 | series    | `title`           | `status` (`watching` / `finished` / `dropped`), `tags` |
-| games     | `title`           | `platform`, `tags` |
-| anime     | `title`           | `status` (`watching` / `finished` / `dropped`), `tags` |
+| games     | `title`           | `platform`, `tags`, `parts` |
+| anime     | `title`           | `status` (`watching` / `finished` / `dropped`), `tags`, `parts` |
 | manga     | `title`           | `status` (`reading` / `finished` / `dropped`), `tags` |
 
 - `title` — непустая строка.
 - `tags` — опциональный массив уникальных строк вида `[a-zа-яё0-9-]+`
   (например `драма`, `криминал`, `90-е`).
+- `parts` — опциональный массив названий частей: позволяет хранить цикл
+  (например все книги «Гарри Поттера») в одной записи. Если поле есть — массив
+  должен быть непустым и без повторов.
+- `added_by` — опциональное поле во всех категориях: имя того, кто добавил запись.
+  Значение должно быть в списке `users.yaml`. Добавился новый человек → дополни
+  список.
 - Запрещены любые поля, не указанные в схеме категории (приводит к ошибке).
 - Внутри категории названия не должны повторяться.
 
