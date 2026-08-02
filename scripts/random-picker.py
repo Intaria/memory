@@ -34,9 +34,7 @@ def collect_entries():
 
 def main():
     parser = argparse.ArgumentParser(description="Случайная запись из memory")
-    parser.add_argument(
-        "category", nargs="?", default=None, help="категория (без неё — все категории)"
-    )
+    parser.add_argument("category", help="категория (обязательна)")
     parser.add_argument(
         "-n", "--count", type=int, default=1, help="сколько записей выдать (без повторов)"
     )
@@ -46,16 +44,13 @@ def main():
         sys.exit("Ошибка: -n должно быть >= 1")
 
     entries = collect_entries()
-    if args.category:
-        categories = {e["category"] for e in entries}
-        if args.category not in categories:
-            available = ", ".join(sorted(categories))
-            sys.exit(
-                f"Ошибка: категория '{args.category}' не найдена (доступно: {available})"
-            )
-        pool = [e for e in entries if e["category"] == args.category]
-    else:
-        pool = entries
+    categories = {e["category"] for e in entries}
+    if args.category not in categories:
+        available = ", ".join(sorted(categories))
+        sys.exit(
+            f"Ошибка: категория '{args.category}' не найдена (доступно: {available})"
+        )
+    pool = [e for e in entries if e["category"] == args.category]
 
     if not pool:
         sys.exit("Ошибка: в категории нет записей")
@@ -66,10 +61,7 @@ def main():
 
     picked = random.sample(pool, args.count)
     for entry in picked:
-        if args.category:
-            print(entry["title"])
-        else:
-            print(f'{entry["title"]} ({entry["category"]})')
+        print(entry["title"])
     return 0
 
 
