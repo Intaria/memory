@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "movie.schema.json",
+  "title": "Movie",
+  "type": "object",
+  "required": ["title"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zа-яё0-9-]+$"
+      },
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false
+}
