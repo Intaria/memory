@@ -41,10 +41,10 @@ tags: [драма, криминал, россия]
 |-----------|-------------------|-------------------|
 | movies    | `title`           | `tags`, `parts`   |
 | books     | `title`           | `author`, `tags`, `parts` |
-| series    | `title`           | `status` (`watching` / `finished` / `dropped`), `tags` |
+| series    | `title`           | `tags` |
 | games     | `title`           | `platform`, `tags`, `parts` |
-| anime     | `title`           | `status` (`watching` / `finished` / `dropped`), `tags`, `parts` |
-| manga     | `title`           | `status` (`reading` / `finished` / `dropped`), `tags` |
+| anime     | `title`           | `tags`, `parts` |
+| manga     | `title`           | `tags`, `parts` |
 
 - `title` — непустая строка.
 - `tags` — опциональный массив уникальных строк вида `[a-zа-яё0-9-]+`

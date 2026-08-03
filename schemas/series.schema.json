@@ -9,10 +9,6 @@
       "type": "string",
       "minLength": 1
     },
-    "status": {
-      "type": "string",
-      "enum": ["watching", "finished", "dropped"]
-    },
     "tags": {
       "type": "array",
       "items": {

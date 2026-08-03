@@ -9,16 +9,21 @@
       "type": "string",
       "minLength": 1
     },
-    "status": {
-      "type": "string",
-      "enum": ["reading", "finished", "dropped"]
-    },
     "tags": {
       "type": "array",
       "items": {
         "type": "string",
         "pattern": "^[a-zа-яё0-9-]+$"
       },
+      "uniqueItems": true
+    },
+    "parts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
       "uniqueItems": true
     }
   },
