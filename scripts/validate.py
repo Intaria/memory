@@ -62,13 +62,21 @@ def load_users():
         return None, f"users.yaml не является валидным YAML: {exc}"
     if not isinstance(data, dict) or not isinstance(data.get("users"), list):
         return None, "users.yaml должен содержать список 'users:'"
-    users = []
-    for name in data["users"]:
+    users = {}
+    for entry in data["users"]:
+        if not isinstance(entry, dict):
+            return None, "users.yaml: каждый пользователь должен быть объектом {id, name}"
+        user_id = entry.get("id")
+        name = entry.get("name")
+        if not isinstance(user_id, str) or not user_id.strip():
+            return None, "users.yaml: у пользователя должен быть непустой id"
         if not isinstance(name, str) or not name.strip():
-            return None, "users.yaml: имена должны быть непустыми строками"
-        users.append(name.strip())
-    if len(set(users)) != len(users):
-        return None, "users.yaml: имена не должны повторяться"
+            return None, f"users.yaml: у пользователя '{user_id}' должен быть непустой name"
+        user_id = user_id.strip()
+        name = name.strip()
+        if user_id in users:
+            return None, f"users.yaml: id '{user_id}' не должен повторяться"
+        users[user_id] = name
     return users, None
 
 
@@ -119,9 +127,12 @@ def main():
             added_by = data.get("added_by")
             if users is not None and isinstance(added_by, str) and added_by:
                 if added_by not in users:
+                    available = ", ".join(
+                        f"'{uid}' ({uname})" for uid, uname in users.items()
+                    )
                     errors.append(
                         f"{rel}: added_by '{added_by}' не найден в users.yaml "
-                        f"(доступно: {', '.join(users)})"
+                        f"(доступно: {available})"
                     )
             title = data.get("title")
             if isinstance(title, str):
